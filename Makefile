@@ -1,8 +1,8 @@
 # Compiler and linker settings
 NASM = nasm
 LD = ld
-NASM_FLAGS = -f elf32
-LD_FLAGS = -m elf_i386
+NASM_FLAGS = -f elf64
+LD_FLAGS = 
 
 # Source and output files
 SRC = asmfetch.asm
