@@ -64,6 +64,13 @@ _start:
     mov rdx, separator_len
     syscall
 
+    ; Print OS
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, os_msg
+    mov rdx, os_msg_len
+    syscall
+
     ; Exit
     mov rax, 60         ; sys_exit
     xor rdi, rdi
