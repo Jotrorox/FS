@@ -1,7 +1,7 @@
 # Compiler and linker settings
 NASM = nasm
 LD = ld
-NASM_FLAGS = -f elf64
+NASM_FLAGS = -f elf64 -OX
 LD_FLAGS = 
 
 # Source and output files
