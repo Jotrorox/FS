@@ -25,17 +25,6 @@ section .data
     ascii_art_len equ $ - ascii_art
 
     ; Messages
-    os_msg db "OS: ", 0
-    os_msg_len equ $ - os_msg
-    
-    kernel_msg db "Kernel: ", 0
-    kernel_msg_len equ $ - kernel_msg
-    
-    cpu_msg db "CPU: ", 0
-    cpu_msg_len equ $ - cpu_msg
-    
-    model_name db "model name", 0
-    model_name_len equ $ - model_name
     
     newline db 10
     separator db 0x1B, '[34m', "-----------------", 0x1B, '[0m', 10
@@ -62,13 +51,6 @@ _start:
     mov rdi, 1
     mov rsi, separator
     mov rdx, separator_len
-    syscall
-
-    ; Print OS
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, os_msg
-    mov rdx, os_msg_len
     syscall
 
     ; Exit
