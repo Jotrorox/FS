@@ -25,10 +25,15 @@ section .data
     ascii_art_len equ $ - ascii_art
 
     ; Messages
-    
+    username_msg db 0x1B, '[34m', "Username: ", 0x1B, '[0m', 0
+    username_msg_len equ $ - username_msg
+
     newline db 10
     separator db 0x1B, '[34m', "-----------------", 0x1B, '[0m', 10
     separator_len equ $ - separator
+
+    ; Commands
+    whoami_cmd db "/usr/bin/whoami", 0
 
 section .bss
     buffer resb 4096
@@ -51,6 +56,52 @@ _start:
     mov rdi, 1
     mov rsi, separator
     mov rdx, separator_len
+    syscall
+
+    ; Print the username message
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, username_msg
+    mov rdx, username_msg_len
+    syscall
+
+    ; Fork process
+    mov rax, 57         ; sys_fork
+    syscall
+
+    ; Child process
+    cmp rax, 0
+    jz get_username
+
+    ; Parent process waits for child
+    mov rdi, rax        ; child pid
+    mov rax, 3          ; sys_wait4
+    syscall
+
+    ; Exit
+    mov rax, 60         ; sys_exit
+    xor rdi, rdi
+    syscall
+
+get_username:
+    ; Get username
+    mov rax, 59         ; sys_execve
+    mov rdi, whoami_cmd
+    xor rsi, rsi
+    xor rdx, rdx
+    syscall
+
+    ; Read output
+    mov rax, 0          ; sys_read
+    mov rdi, 0          ; stdin
+    mov rsi, buffer
+    mov rdx, 4096
+    syscall
+
+    ; Print username
+    mov rax, 1          ; sys_write
+    mov rdi, 1          ; stdout
+    mov rsi, buffer
     syscall
 
     ; Exit
